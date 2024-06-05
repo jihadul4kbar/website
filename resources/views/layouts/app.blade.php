@@ -269,7 +269,7 @@
  <!-- ======= Footer ======= -->
  <footer id="footer" class="footer">
     <div class="copyright">
-      &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+      Made by love <a href="https://jihadul4kbar.github.io">Jihadul Akbar</a> &copy; Copyright Website Admin Tempelate by <strong><span>NiceAdmin</span></strong>. All Rights Reserved
     </div>
     <div class="credits">
       <!-- All the links in the footer should remain intact. -->

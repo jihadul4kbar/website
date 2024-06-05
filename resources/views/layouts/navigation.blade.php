@@ -8,7 +8,7 @@
         </a>
       </li><!-- End Dashboard Nav -->
        <li class="nav-item">
-        <a class="nav-link collapsed" href="users-profile.html">
+        <a class="nav-link collapsed" href="{{ route('berita.index') }}">
           <i class="bi bi-journal-bookmark-fill"></i>
           <span>Berita</span>
         </a>
@@ -186,7 +186,7 @@
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="users-profile.html">
+        <a class="nav-link collapsed" href="{{ route('user.index') }}">
           <i class="bi bi-person"></i>
           <span>User</span>
         </a>
