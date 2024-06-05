@@ -49,7 +49,6 @@ class ApiAuthController extends BaseController
     }
     // GET [Auth: Token]
     public function logout(){
-
         auth()->user()->tokens()->delete();
         $user = Auth::user(); 
         return response()->json([
