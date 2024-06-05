@@ -14,4 +14,5 @@ Route::post('login', [ApiAuthController::class, 'login']);
      
 Route::middleware('auth:api')->group( function () {
     Route::resource('berita', ApiBeritaController::class);
+    Route::get("logout", [ApiAuthController::class, "logout"]);
 });

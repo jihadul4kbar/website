@@ -47,4 +47,15 @@ class ApiAuthController extends BaseController
             return $this->sendError('Tidak memiliki hak akses.', ['error'=>'Username Atau Password Salah']);
         } 
     }
+    // GET [Auth: Token]
+    public function logout(){
+
+        auth()->user()->tokens()->delete();
+        $user = Auth::user(); 
+        return response()->json([
+            "status" => true,
+            "message" => "User logged out",
+            "data" => [$user]
+        ]);
+    }
 }
