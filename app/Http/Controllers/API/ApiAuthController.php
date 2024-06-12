@@ -30,6 +30,7 @@ class ApiAuthController extends BaseController
         $user = User::create($input);
         // $success['token'] =  $user->createToken('MyApp')->accessToken;
         $success['name'] =  $user->name;
+        $success['email'] =  $user->email;
    
         return $this->sendResponse($success, 'Pengguna berhasil mendaftar.');
     }
