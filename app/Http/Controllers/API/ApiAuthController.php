@@ -2,61 +2,79 @@
 
 namespace App\Http\Controllers\API;
 
+use Validator;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Validator;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\API\BaseController;
 
 class ApiAuthController extends BaseController
 {
     //
-    public function register(Request $request): JsonResponse
+    public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
+            'name'      => 'required',
+            'email'     => 'required|email|unique:users',
+            'password'  => 'required|min:8|confirmed'
         ]);
-     
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
         }
-     
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-        // $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['name'] =  $user->name;
-        $success['email'] =  $user->email;
-   
-        return $this->sendResponse($success, 'Pengguna berhasil mendaftar.');
+
+        $user = User::create([
+            'name'      => $request->name,
+            'email'     => $request->email,
+            'password'  => Hash::make($request->password)
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Register Success!',
+            'data'    => $user  
+        ]);
     }
 
-    public function login(Request $request): JsonResponse
+    public function login(Request $request)
     {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
-            $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')-> accessToken; 
-            $success['name'] =  $user->name;
-            $success['email'] =  $user->email;
-   
-            return $this->sendResponse($success, 'Pengguna berhasil login.');
-        } 
-        else{ 
-            return $this->sendError('Tidak memiliki hak akses.', ['error'=>'Username Atau Password Salah']);
-        } 
-    }
-    // GET [Auth: Token]
-    public function logout(){
-        auth()->user()->tokens()->delete();
-        $user = Auth::user(); 
-        return response()->json([
-            "status" => true,
-            "message" => "User logged out",
-            "data" => [$user]
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required'
         ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Login Failed!',
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Login Success!',
+            'data'    => $user,
+            'token'   => $user->createToken('authToken')->accessToken    
+        ]);
+    }
+    
+    public function logout(Request $request)
+    {
+        $removeToken = $request->user()->tokens()->delete();
+
+        if($removeToken) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Logout Success!',  
+            ]);
+        }
     }
 }

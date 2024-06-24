@@ -11,8 +11,10 @@ Route::get('/user', function (Request $request) {
 
 Route::post('register', [ApiAuthController::class, 'register']);
 Route::post('login', [ApiAuthController::class, 'login']);
+
 Route::resource('berita', ApiBeritaController::class);
 Route::middleware('auth:api')->group( function () {
     // Route::resource('berita', ApiBeritaController::class);
-    Route::get("logout", [ApiAuthController::class, "logout"]);
+    Route::post('logout', [ApiAuthController::class, 'logout']);
+    Route::get("dashboard",[ApiAuthController::class, "dashboard"]);
 });
