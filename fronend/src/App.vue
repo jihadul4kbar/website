@@ -31,9 +31,6 @@ import { RouterLink, RouterView } from 'vue-router'
           <li class="nav-item">
               <RouterLink to="/login" class="nav-link">Login</RouterLink>
           </li>
-          <li class="nav-item">
-              <RouterLink to="/register" class="nav-link" >Register</RouterLink>
-          </li>
         </div>
         <div v-else>
           <li @click.prevent="logout" class="nav-link" style="cursor:pointer">Logout</li>
